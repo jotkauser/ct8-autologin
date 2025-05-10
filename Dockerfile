@@ -28,6 +28,7 @@ ENV LANG=en_US.UTF-8 \
 		lsb-release \
 		libxfixes3 \
 		libxkbcommon0 \
+		chromium \
 		xdg-utils \
 		--no-install-recommends \
 		&& rm -rf /var/lib/apt/lists/*
@@ -36,7 +37,7 @@ WORKDIR /app
 COPY package.json ./
 RUN groupadd -r nodejs && useradd -r -g nodejs nodejs && chown -R nodejs:nodejs /app && mkdir /home/nodejs && chown -R nodejs:nodejs /home/nodejs
 USER nodejs
-
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm install
 COPY . .
 RUN npm run build

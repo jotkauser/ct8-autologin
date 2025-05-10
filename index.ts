@@ -20,7 +20,9 @@ console.log(`[!] Using username: ${process.env.PANEL_USERNAME || ""}`);
 console.log(`[!] Using password: ${process.env.PANEL_PASSWORD.replace(/./g, "*") || ""}`);
 const type = process.argv[2];
 const loginByPuppeteer = async () => {
-	const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"] });
+	const skipDownload = process.env.PUPPETEER_SKIP_DOWNLOAD === "true";
+	const path = skipDownload ? "/usr/bin/chromium" : null;
+	const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"], executablePath: path });
 	const page = await browser.newPage();
 	await page.goto(process.env.PANEL_URL || "https://ct8.pl");
 	await page.waitForSelector('input[name="username"]');
